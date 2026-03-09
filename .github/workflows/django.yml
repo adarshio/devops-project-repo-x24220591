@@ -142,9 +142,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ASIAX7L4AQ7TELUIAK33
-          aws-secret-access-key: 6F6aOkOhO6M/Bd+Q1QupqztIcfwfFQGcvcz9Me9c
-          aws-session-token: IQoJb3JpZ2luX2VjEGIaCXVzLXdlc3QtMiJIMEYCIQCCEbQeRezCpJnnEPoPRFvVeNnex2qTmaKgG8EFMc5STQIhAKb/Dsr4LxGcTEL+lDSSCM3Jasq5a1bZxLsP9PdqMRjpKrQCCCsQARoMNTQ4NDA1MjgyNzkwIgwfQh25RsnakhnHXF4qkQKs/8uZ9sjpsf3+M5UXNBUBnz6itR7Zmey1iudX/wxPPjbivWNj9rpYLXEBLLr+s7AC2gWNi1ZKiI98BMPQqTc0z2e72OTSsfXEoGohaf8Yp44FwX1JX54fiPlS1GSOyZpIhiJcZcN/116OOypuNaOMdjMiwHaEQ0b/jliRPDoWTLva5ZWg/E600wxiBdzT4vHFPmG8Zzu5vgQcHeeqEGov7pcLoJKmh1mjy0GXnzG6vfZyb/MU4AE3Gjl7pLfgbNZGSaJ9ynA60+mCgDSUN9WqHBUuJnjrvn7f50V6zQFjf/j8gq4r9gfe+jsJhnGBDn3PXW2OSPVUxZzCZ2kyYaJaWczv7SmERj9W8DCmg13IlCIwpqa6zQY6nAFi2cvytR6gK01jGdQNNE1IBclGyJXYCTxUh+brwwzYql38ALu5OOZCiV5612CgMnT81L/qoM7+rxKsPGcofkraFAgXqR6l2z8TZLNuxjMdzYJUZznGc6wbpquGVu7esCEvSUAX68+Zb5Vr7Pn5HXwy/6NT6tG8T0fMxh3lBH00fN9N7IUzF3ggOvDTf+H9exSPDn4OLIjxlWHdUps=
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
       - name: Deploy to Elastic Beanstalk
