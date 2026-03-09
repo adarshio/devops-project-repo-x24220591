@@ -94,9 +94,9 @@ jobs:
 
       - name: Run SonarCloud Scan
         env:
-          SONAR_TOKEN: 6a710c32be508aa834a83a296a5f05f38a0e837f
-          SONAR_PROJECT_KEY: adarshio_devops-project-repo-x24220591
-          SONAR_ORG: adarshio
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_ORG: ${{ secrets.SONAR_ORG }}
         run: |
           sonar-scanner \
             -Dsonar.login=$SONAR_TOKEN \
@@ -142,9 +142,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
       - name: Deploy to Elastic Beanstalk
