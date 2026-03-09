@@ -30,7 +30,6 @@ class Car(models.Model):
 
     def __str__(self):
         return self.name
-    
     def img_preview(self): #new
         return mark_safe(f'<img src = "{self.image.url}" width = "100"/>')
 
@@ -50,7 +49,3 @@ class Order(models.Model):
     rent = models.CharField(max_length=10)
     days = models.CharField(max_length=3)
     is_complete = models.BooleanField(default=False)
-    
-    
-
-# Create your models here.
