@@ -1,0 +1,54 @@
+{% extends "car_dealer_navbar.html" %}
+{% block title %}Dealer Dashboard — RentMyRide{% endblock title %}
+
+{% block css %}
+<style>
+  .hero-section {
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?w=1600&q=80') center/cover no-repeat;
+    border-radius: 12px; overflow: hidden; margin-bottom: 2rem;
+    min-height: 280px; display: flex; align-items: center;
+  }
+  .hero-section::before { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(13,27,42,0.85) 45%, rgba(13,27,42,0.3)); }
+  .hero-content { position: relative; z-index: 2; padding: 2.5rem 3rem; }
+  .hero-content .label { display: inline-block; background: rgba(200,169,110,0.2); border: 1px solid rgba(200,169,110,0.5); color: #000000; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; margin-bottom: 1rem; }
+  .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #fff; font-weight: 700; margin-bottom: 0.6rem; }
+  .hero-content p { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+
+  .cars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .car-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all 0.3s; }
+  .car-card:hover { box-shadow: 0 12px 36px rgba(26,60,94,0.13); transform: translateY(-3px); }
+  .car-card img { width: 100%; height: 200px; object-fit: cover; }
+  .car-card-body { padding: 1.3rem 1.4rem; }
+  .car-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #588157; margin-bottom: 0.3rem; }
+  .car-meta { font-size: 0.83rem; color: #6b7280; margin-bottom: 0.2rem; }
+  .car-price { font-size: 1rem; font-weight: 700; color: #000000; margin: 0.6rem 0 1rem; }
+  .btn-login { display: block; text-align: center; background: #588157; color: #fff; border-radius: 5px; padding: 0.7rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+  .btn-login:hover { background: #000000; color: #fff; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="hero-section">
+  <div class="hero-content">
+    <span class="label">Dealer Dashboard</span>
+    <h1>Online Car Rental System</h1>
+    <p>Browse the fleet available on the platform. Manage your listings from the navigation above.</p>
+  </div>
+</div>
+
+<div class="cars-grid">
+  {% for car in cars %}
+  <div class="car-card">
+    <img src="/media/{{ car.image }}" alt="{{ car.name }}">
+    <div class="car-card-body">
+      <div class="car-name">{{ car.name }}</div>
+      <div class="car-meta">Dealer: {{ car.car_dealer }}</div>
+      <div class="car-price">₹ {{ car.rent }} <span style="font-weight:400;font-size:0.8rem;color:#9ca3af;">/ day</span></div>
+      <div class="car-meta" style="margin-bottom:0.8rem;">📍 {{ car.location.city }}</div>
+      <a href="/customer_login/" class="btn-login">Login to Rent</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock body %}

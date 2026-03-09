@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Dealer Signup — RentMyRide{% endblock %}
+
+{% block css %}
+<style>
+  body { background: #f1f4f8; }
+  .signup-wrapper { min-height: calc(100vh - 70px); display: grid; grid-template-columns: 1fr 1.4fr; }
+  .signup-visual {
+    background: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1200&q=80') center/cover no-repeat;
+    position: relative;
+  }
+  .signup-visual::before { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(26,60,94,0.9), rgba(13,27,42,0.6)); }
+  .signup-visual-content { position: relative; z-index: 2; padding: 3rem; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
+  .signup-visual-content h2 { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: #fff; margin-bottom: 0.8rem; }
+  .signup-visual-content p { color: rgba(255,255,255,0.7); line-height: 1.65; }
+  .auth-badge { display: inline-block; background: rgba(200,169,110,0.2); border: 1px solid rgba(200,169,110,0.5); color: #000000; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.9rem; border-radius: 2px; margin-bottom: 1.5rem; }
+  .signup-form-panel { background: #fff; padding: 3.5rem 4vw; overflow-y: auto; }
+  .signup-form-panel h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: #588157; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 0.9rem; color: #6b7280; margin-bottom: 2rem; }
+  .subtitle a { color: #000000; text-decoration: none; font-weight: 600; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-label-styled { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #374151; margin-bottom: 5px; display: block; }
+  .form-input { width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.93rem; color: #1f2937; background: #fafafa; transition: all 0.2s; }
+  .form-input:focus { border-color: #000000; background: #fff; outline: none; box-shadow: 0 0 0 3px rgba(200,169,110,0.12); }
+  .btn-signup { width: 100%; padding: 0.92rem; background: #588157; color: #fff; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+  .btn-signup:hover { background: #000000; }
+  @media (max-width: 900px) { .signup-wrapper { grid-template-columns: 1fr; } .signup-visual { display: none; } }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="signup-wrapper">
+  <div class="signup-visual">
+    <div class="signup-visual-content">
+      <span class="auth-badge">Dealer Registration</span>
+      <h2>Start Earning from Your Fleet Today</h2>
+      <p>List your vehicles on RentMyRide and connect with thousands of customers looking to rent cars in your city.</p>
+    </div>
+  </div>
+  <div class="signup-form-panel">
+    <h1>Dealer Registration</h1>
+    <p class="subtitle">Already registered? <a href="/car_dealer_login/">Sign in</a></p>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label-styled">First Name</label>
+          <input type="text" class="form-input" placeholder="First name" name="first_name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Last Name</label>
+          <input type="text" class="form-input" placeholder="Last name" name="last_name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Username</label>
+          <input type="text" class="form-input" placeholder="Choose a username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Email Address</label>
+          <input type="text" class="form-input" placeholder="your@email.com" name="email" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Contact Number</label>
+          <input type="text" class="form-input" placeholder="+91 00000 00000" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">City</label>
+          <input type="text" class="form-input" placeholder="Operating city" name="city" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Password</label>
+          <input type="password" class="form-input" placeholder="Create password" name="password1" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label-styled">Confirm Password</label>
+          <input type="password" class="form-input" placeholder="Confirm password" name="password2" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-signup">Register as Dealer</button>
+    </form>
+  </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,88 @@
+{% extends 'car_dealer_navbar.html' %}
+{% block title %}All Cars — RentMyRide{% endblock %}
+
+{% block css %}
+<style>
+  .page-header {
+    margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #588157; margin: 0; }
+  .page-header p { font-size: 0.9rem; color: #6b7280; margin: 0; }
+  .btn-add {
+    background: #588157; color: #fff; border: none; border-radius: 6px;
+    padding: 0.7rem 1.5rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 600; text-decoration: none;
+    letter-spacing: 0.04em; transition: all 0.2s;
+  }
+  .btn-add:hover { background: #000000; color: #fff; }
+
+  .cars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .car-card {
+    background: #fff; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all 0.3s;
+  }
+  .car-card:hover { box-shadow: 0 10px 36px rgba(26,60,94,0.12); transform: translateY(-3px); }
+  .car-card img { width: 100%; height: 185px; object-fit: cover; }
+  .car-card-body { padding: 1.2rem 1.4rem; }
+  .car-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #588157; margin-bottom: 0.4rem; }
+  .car-meta { font-size: 0.83rem; color: #6b7280; margin-bottom: 0.2rem; }
+  .car-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 1.4rem; background: #f8f9fc;
+    border-top: 1px solid #f0ece6;
+  }
+  .car-capacity { font-size: 0.82rem; color: #4b5563; font-weight: 600; }
+  .btn-delete {
+    background: #fff0f0; color: #dc2626; border: 1px solid #fecaca;
+    border-radius: 5px; padding: 0.4rem 1rem;
+    font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s;
+  }
+  .btn-delete:hover { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+  .empty-state { text-align: center; padding: 5rem 2rem; background: #fff; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #588157; margin-bottom: 0.5rem; }
+  .empty-state p { color: #6b7280; margin-bottom: 1.5rem; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="page-header">
+  <div>
+    <h1>Your Fleet</h1>
+    <p>Manage all vehicles listed on your dealer account.</p>
+  </div>
+  <a href="/add_car/" class="btn-add">+ Add New Car</a>
+</div>
+
+{% if cars %}
+<div class="cars-grid">
+  {% for car in cars %}
+  <div class="car-card">
+    {% if car.image %}
+    <img src="{{ car.image.url }}" alt="{{ car.name }}">
+    {% else %}
+    <div style="height:185px;background:linear-gradient(135deg,#588157,#2d5a8e);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem;">🚗</div>
+    {% endif %}
+    <div class="car-card-body">
+      <div class="car-name">{{ car.name }}</div>
+      <div class="car-meta">📍 {{ car.location.city }}</div>
+      <div class="car-meta" style="color:#000000;font-weight:600;font-size:0.9rem;margin-top:0.4rem;">₹ {{ car.rent }} / day</div>
+    </div>
+    <div class="car-footer">
+      <span class="car-capacity">👥 {{ car.capacity }} seats</span>
+      <a href="/delete_car/{{ car.id }}" class="btn-delete" onclick="return confirm('Delete {{ car.name }}?')">Delete</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">🚗</div>
+  <h3>No Cars Listed Yet</h3>
+  <p>Start by adding your first vehicle to begin receiving rental requests.</p>
+  <a href="/add_car/" class="btn-add">Add Your First Car</a>
+</div>
+{% endif %}
+{% endblock body %}

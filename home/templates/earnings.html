@@ -1,0 +1,100 @@
+{% extends 'car_dealer_navbar.html' %}
+
+{% block css %}
+<style>
+  .page-header {
+    margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #e5e7eb;
+  }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #588157; margin-bottom: 0.3rem; }
+  .page-header p { font-size: 0.9rem; color: #6b7280; }
+
+  .earnings-summary {
+    background: linear-gradient(135deg, #588157 0%, #2d5a8e 100%);
+    border-radius: 10px; padding: 2rem 2.5rem; margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+    box-shadow: 0 4px 20px rgba(26,60,94,0.2);
+  }
+  .earnings-icon { font-size: 2.5rem; }
+  .earnings-text { flex: 1; }
+  .earnings-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.3rem; }
+  .earnings-amount { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: #000000; line-height: 1; }
+  .earnings-sub { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 0.3rem; }
+
+  .orders-table-wrap { background: #fff; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); overflow: hidden; }
+  .table-header { background: #588157; padding: 1.2rem 1.8rem; display: flex; align-items: center; justify-content: space-between; }
+  .table-header h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; margin: 0; }
+  .order-count { background: rgba(200,169,110,0.2); border: 1px solid rgba(200,169,110,0.4); color: #000000; font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.8rem; border-radius: 20px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: #f8f9fc; padding: 0.9rem 1.4rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #4b5563; border-bottom: 1px solid #f0ece6; text-align: left; }
+  tbody td { padding: 1rem 1.4rem; border-bottom: 1px solid #f9fafb; font-size: 0.9rem; color: #374151; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #fdfbf8; }
+  .customer-name { font-weight: 600; color: #588157; }
+  .rent-amount { font-weight: 700; color: #000000; }
+
+  .empty-state { text-align: center; padding: 4rem 2rem; }
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #588157; margin-bottom: 0.4rem; }
+  .empty-state p { color: #6b7280; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h1>Earnings & Bookings</h1>
+  <p>Track your completed rentals and total revenue.</p>
+</div>
+
+{% if all_orders %}
+<div class="earnings-summary">
+  <div class="earnings-icon">💰</div>
+  <div class="earnings-text">
+    <div class="earnings-label">Total Earnings</div>
+    <div class="earnings-amount">₹ {{ amount }}</div>
+    <div class="earnings-sub">{{ all_orders|length }} completed rental{{ all_orders|length|pluralize }}</div>
+  </div>
+</div>
+
+<div class="orders-table-wrap">
+  <div class="table-header">
+    <h2>Completed Rentals</h2>
+    <span class="order-count">{{ all_orders|length }} bookings</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Vehicle</th>
+          <th>Photo</th>
+          <th>Duration</th>
+          <th>Rent Earned</th>
+          <th>Capacity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in all_orders %}
+        <tr>
+          <td class="customer-name">{{ order.user.get_full_name }}</td>
+          <td>{{ order.car.name }}</td>
+          <td><img src="{{ order.car.image.url }}" width="80" height="60" style="border-radius:6px;object-fit:cover;" alt="{{ order.car.name }}"></td>
+          <td>{{ order.days }} days</td>
+          <td class="rent-amount">₹ {{ order.rent }}</td>
+          <td>{{ order.car.capacity }} seats</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="orders-table-wrap">
+  <div class="empty-state">
+    <div class="empty-icon">📊</div>
+    <h3>No Earnings Yet</h3>
+    <p>Completed rentals will appear here along with your total earnings.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock body %}

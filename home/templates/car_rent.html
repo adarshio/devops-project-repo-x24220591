@@ -1,0 +1,77 @@
+{% extends 'customer_navbar.html' %}
+{% block title %}Rent Vehicle — RentMyRide{% endblock %}
+
+{% block css %}
+<style>
+  body { background: #f1f4f8; }
+
+  .rent-wrapper {
+    min-height: calc(100vh - 64px);
+    display: grid; grid-template-columns: 1fr 1fr; align-items: stretch;
+  }
+  .rent-visual {
+    background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80') center/cover no-repeat;
+    position: relative;
+  }
+  .rent-visual::before { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(13,27,42,0.75), rgba(26,60,94,0.55)); }
+  .rent-visual-content { position: relative; z-index: 2; padding: 3rem; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
+  .rent-visual-content .label { display: inline-block; background: rgba(200,169,110,0.2); border: 1px solid rgba(200,169,110,0.5); color: #000000; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.9rem; border-radius: 2px; margin-bottom: 1rem; }
+  .rent-visual-content h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 0.6rem; }
+  .rent-visual-content p { color: rgba(255,255,255,0.7); line-height: 1.6; }
+  .price-badge { background: rgba(200,169,110,0.15); border: 1px solid rgba(200,169,110,0.4); border-radius: 8px; padding: 1rem 1.4rem; margin-top: 1.5rem; display: inline-block; }
+  .price-badge .per-day { font-size: 0.75rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
+  .price-badge .amount { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #000000; }
+
+  .rent-form-panel { background: #fff; padding: 4rem 4vw; display: flex; flex-direction: column; justify-content: center; }
+  .rent-form-panel h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: #588157; margin-bottom: 0.4rem; }
+  .rent-form-panel .sub { font-size: 0.9rem; color: #6b7280; margin-bottom: 2.2rem; }
+
+  .form-label-styled { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #374151; margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; padding: 13px 16px; border: 1px solid #e5e7eb; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: #1f2937; background: #fafafa; transition: all 0.2s; margin-bottom: 1.4rem; }
+  .form-input:focus { border-color: #000000; background: #fff; outline: none; box-shadow: 0 0 0 3px rgba(200,169,110,0.12); }
+
+  .estimate-box { background: #f8f9fc; border: 1px solid #f0ece6; border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 1.8rem; }
+  .estimate-box p { font-size: 0.85rem; color: #6b7280; margin: 0; }
+  .estimate-box .note { font-size: 0.78rem; color: #9ca3af; margin-top: 0.4rem; }
+
+  .btn-confirm { width: 100%; padding: 0.95rem; background: #588157; color: #fff; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em; }
+  .btn-confirm:hover { background: #000000; }
+
+  @media (max-width: 768px) { .rent-wrapper { grid-template-columns: 1fr; } .rent-visual { min-height: 260px; } }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="rent-wrapper">
+  <div class="rent-visual">
+    <div class="rent-visual-content">
+      <span class="label">Book This Vehicle</span>
+      <h2>{{ car.name }}</h2>
+      <p>Complete your booking below. Enter the number of days you'd like to rent this vehicle.</p>
+      <div class="price-badge">
+        <div class="per-day">Daily Rate</div>
+        <div class="amount">₹ {{ cost_per_day }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rent-form-panel">
+    <h1>Confirm Rental</h1>
+    <p class="sub">Enter rental duration to proceed with your booking.</p>
+
+    <form action="/order_details/" method="post">
+      {% csrf_token %}
+      <label class="form-label-styled">Number of Days</label>
+      <input type="text" class="form-input" placeholder="e.g. 3" name="days" required>
+
+      <div class="estimate-box">
+        <p>Rate: <strong>₹ {{ cost_per_day }}</strong> per day</p>
+        <p class="note">Final total will be calculated based on days entered.</p>
+      </div>
+
+      <input type="hidden" value="{{ car.id }}" name="id">
+      <button type="submit" class="btn-confirm">Confirm Booking →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

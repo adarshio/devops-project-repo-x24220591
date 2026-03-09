@@ -1,0 +1,130 @@
+{% extends "customer_navbar.html" %}
+{% block title %}Search Cars — RentMyRide{% endblock title %}
+
+{% block css %}
+<style>
+  body { background: #f1f4f8; }
+
+  .search-hero {
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?w=1800&q=80') center/cover no-repeat;
+    min-height: 52vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .search-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(13,27,42,0.7) 0%, rgba(13,27,42,0.55) 100%);
+  }
+  .search-hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 2rem;
+    width: 100%; max-width: 700px;
+  }
+  .search-hero-content .label {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #000000;
+    border: 1px solid rgba(200,169,110,0.5);
+    padding: 0.3rem 0.9rem; border-radius: 2px;
+    display: inline-block; margin-bottom: 1.2rem;
+  }
+  .search-hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: #fff; font-weight: 700; margin-bottom: 0.6rem;
+  }
+  .search-hero-content p { color: rgba(255,255,255,0.75); font-size: 1.05rem; margin-bottom: 2.2rem; }
+
+  /* SEARCH BOX */
+  .search-box {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+    padding: 2rem 2.5rem;
+    display: flex; align-items: flex-end; gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .search-field { flex: 1; min-width: 200px; }
+  .search-field label {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #374151; margin-bottom: 6px; display: block;
+  }
+  .search-field input {
+    width: 100%; padding: 13px 16px;
+    border: 1px solid #e5e7eb; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    transition: all 0.2s; background: #fafafa;
+  }
+  .search-field input:focus { border-color: #000000; outline: none; box-shadow: 0 0 0 3px rgba(200,169,110,0.12); background: #fff; }
+  .btn-search {
+    padding: 13px 2.2rem; background: #588157; color: #fff;
+    border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.04em; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-search:hover { background: #000000; }
+
+  /* HOW IT WORKS */
+  .how-section { padding: 4rem 5vw; background: #fff; }
+  .section-tag { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #000000; margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #588157; margin-bottom: 2rem; }
+  .step-card { padding: 2rem 1.5rem; text-align: center; }
+  .step-num {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: #588157; color: #fff;
+    font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+  .step-title { font-weight: 700; color: #588157; margin-bottom: 0.5rem; font-size: 1rem; }
+  .step-desc { font-size: 0.88rem; color: #6b7280; line-height: 1.65; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<section class="search-hero">
+  <div class="search-hero-content">
+    <span class="label">Find Your Perfect Ride</span>
+    <h1>Search Available Cars</h1>
+    <p>Enter your city to see all vehicles available for rent near you.</p>
+    <div class="search-box">
+      <form action="/search_results/" method="post" style="display:flex;gap:1rem;flex:1;align-items:flex-end;flex-wrap:wrap;">
+        {% csrf_token %}
+        <div class="search-field">
+          <label for="city">Enter City Name</label>
+          <input type="text" id="city" name="city" placeholder="e.g. Mumbai, Delhi, Bangalore" required>
+        </div>
+        <button type="submit" class="btn-search">Search Cars →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="section-tag">Simple Process</div>
+  <h2 class="section-title">Rent a Car in 3 Easy Steps</h2>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Search Your City</div>
+        <div class="step-desc">Enter your city name to browse all available cars in your area with live pricing.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Choose Your Vehicle</div>
+        <div class="step-desc">Compare options, check capacity and daily rates, then select the car that fits your needs.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Confirm & Go</div>
+        <div class="step-desc">Enter rental duration, confirm your booking, and get the dealer's contact details instantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock body %}

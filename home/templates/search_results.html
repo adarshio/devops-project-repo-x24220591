@@ -1,0 +1,96 @@
+{% extends 'customer_navbar.html' %}
+{% block title %}Search Results — RentMyRide{% endblock %}
+
+{% block css %}
+<style>
+  body { background: #f1f4f8; }
+  .results-header {
+    background: url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1800&q=80') center/cover no-repeat;
+    position: relative; padding: 4rem 5vw;
+  }
+  .results-header::before { content: ''; position: absolute; inset: 0; background: rgba(13,27,42,0.72); }
+  .results-header-content { position: relative; z-index: 2; }
+  .results-header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #fff; margin-bottom: 0.4rem; }
+  .results-header p { color: rgba(255,255,255,0.7); }
+
+  .results-section { padding: 3rem 5vw; }
+  .section-tag { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #000000; margin-bottom: 0.5rem; }
+
+  .car-card {
+    background: #fff; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all 0.3s; height: 100%;
+    display: flex; flex-direction: column;
+  }
+  .car-card:hover { box-shadow: 0 12px 40px rgba(26,60,94,0.14); transform: translateY(-4px); }
+  .car-card img { width: 100%; height: 200px; object-fit: cover; }
+  .car-card-body { padding: 1.4rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .car-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #588157; margin-bottom: 0.5rem; }
+  .car-meta { font-size: 0.84rem; color: #6b7280; margin-bottom: 0.2rem; }
+  .car-price { font-size: 1.05rem; font-weight: 700; color: #000000; margin: 0.7rem 0 1rem; }
+  .btn-rent-form { margin-top: auto; }
+  .btn-rent {
+    display: block; width: 100%; text-align: center;
+    background: #588157; color: #fff; border: none;
+    border-radius: 5px; padding: 0.75rem;
+    font-size: 0.88rem; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-rent:hover { background: #000000; }
+
+  .empty-state {
+    text-align: center; padding: 5rem 2rem;
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #588157; margin-bottom: 0.5rem; }
+  .empty-state p { color: #6b7280; margin-bottom: 1.5rem; }
+  .btn-back { background: #588157; color: #fff; border: none; border-radius: 5px; padding: 0.75rem 2rem; text-decoration: none; font-weight: 600; transition: background 0.2s; }
+  .btn-back:hover { background: #000000; color: #fff; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="results-header">
+  <div class="results-header-content">
+    <p class="section-tag">Search Results</p>
+    <h1>Available Cars Near You</h1>
+    <p>Showing vehicles available for your selected city</p>
+  </div>
+</div>
+
+<div class="results-section">
+  {% if request.session.vehicles_list %}
+  <div class="row g-4">
+    {% for car in request.session.vehicles_list %}
+    <div class="col-lg-4 col-md-6">
+      <div class="car-card">
+        <img src="{{ car.image }}" alt="{{ car.name }}">
+        <div class="car-card-body">
+          <div class="car-name">{{ car.name }}</div>
+          <div class="car-meta">📍 {{ car.city }}</div>
+          <div class="car-meta">👥 Capacity: {{ car.capacity }}</div>
+          <div class="car-price">₹ {{ car.rent }} <span style="font-weight:400;font-size:0.82rem;color:#9ca3af;">/ day</span></div>
+          <div class="btn-rent-form">
+            <form action="/car_rent/" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="id" value="{{ car.id }}">
+              <button type="submit" class="btn-rent">Rent Now →</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🚗</div>
+    <h3>No Cars Available</h3>
+    <p>We couldn't find any cars in that city right now. Try a different location.</p>
+    <a href="/customer_homepage/" class="btn-back">Search Again</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

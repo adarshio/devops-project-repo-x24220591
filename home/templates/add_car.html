@@ -1,0 +1,116 @@
+{% extends "car_dealer_navbar.html" %}
+{% block title %}Add Car — RentMyRide{% endblock title %}
+
+{% block css %}
+<style>
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #588157; margin-bottom: 0.3rem; }
+  .page-header p { font-size: 0.9rem; color: #6b7280; }
+
+  .card-form {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card-form-header {
+    background: #588157; padding: 1.4rem 2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .card-form-header h2 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: #fff; margin: 0; }
+  .card-form-body { padding: 2rem 2.5rem; }
+
+  .form-section-title {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #000000;
+    padding-bottom: 0.5rem; border-bottom: 1px solid #f0ece6;
+    margin-bottom: 1.3rem; margin-top: 0.5rem;
+  }
+  label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #4b5563; margin-bottom: 5px; display: block; }
+  .form-control {
+    width: 100%; padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.93rem; color: #1f2937;
+    background: #fafafa; transition: all 0.2s; margin-bottom: 1.1rem;
+  }
+  .form-control:focus { border-color: #000000; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(200,169,110,0.12); }
+  input[type="file"].form-control { padding: 10px 14px; cursor: pointer; }
+
+  .upload-area {
+    border: 2px dashed #e5e7eb; border-radius: 8px;
+    padding: 2rem; text-align: center; cursor: pointer;
+    transition: all 0.2s; background: #fafafa; margin-bottom: 1.1rem;
+  }
+  .upload-area:hover { border-color: #000000; background: rgba(200,169,110,0.03); }
+  .upload-area p { font-size: 0.88rem; color: #6b7280; margin: 0; }
+
+  .btn-submit {
+    padding: 0.88rem 2.5rem; background: #588157; color: #fff;
+    border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; letter-spacing: 0.04em;
+  }
+  .btn-submit:hover { background: #000000; }
+  .btn-cancel {
+    padding: 0.88rem 2rem; background: transparent; color: #6b7280;
+    border: 1px solid #e5e7eb; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    cursor: pointer; margin-left: 0.8rem; transition: all 0.2s;
+  }
+  .btn-cancel:hover { background: #f9fafb; color: #374151; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="page-header">
+  <h1>Add New Vehicle</h1>
+  <p>List a new car on the RentMyRide platform for customers to rent.</p>
+</div>
+
+<div class="card-form">
+  <div class="card-form-header">
+    <h2>Vehicle Details</h2>
+  </div>
+  <div class="card-form-body">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-section-title">Basic Information</div>
+      <div class="row">
+        <div class="col-md-8">
+          <label>Car Name / Model</label>
+          <input type="text" class="form-control" name="car_name" placeholder="e.g. Maruti Swift, Honda City">
+        </div>
+        <div class="col-md-4">
+          <label>City</label>
+          <input type="text" class="form-control" name="city" placeholder="Operating city">
+        </div>
+      </div>
+
+      <div class="form-section-title">Specifications</div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Seating Capacity</label>
+          <input type="number" class="form-control" name="capacity" placeholder="Number of seats (e.g. 5)">
+        </div>
+        <div class="col-md-6">
+          <label>Daily Rent (₹)</label>
+          <input type="number" class="form-control" name="rent" placeholder="Price per day in ₹">
+        </div>
+      </div>
+
+      <div class="form-section-title">Vehicle Photo</div>
+      <label>Upload Car Image</label>
+      <input type="file" class="form-control" name="image" accept="image/*">
+
+      <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f0ece6;">
+        <button type="submit" class="btn-submit">Add Vehicle</button>
+        <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock body %}

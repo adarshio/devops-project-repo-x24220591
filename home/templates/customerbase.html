@@ -1,0 +1,24 @@
+{% extends "customer_navbar.html" %}
+{% block title %}Car Rental — RentMyRide{% endblock title %}
+
+{% block css %}
+<style>
+  body { background: #f1f4f8; }
+  .welcome-banner {
+    background: linear-gradient(135deg, #588157, #2d5a8e);
+    border-radius: 10px; padding: 2.5rem 2rem; margin-bottom: 2rem;
+    text-align: center;
+  }
+  .welcome-banner h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 0.5rem; }
+  .welcome-banner p { color: rgba(255,255,255,0.7); }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div style="padding: 2rem 5vw;">
+  <div class="welcome-banner">
+    <h1>Welcome to RentMyRide</h1>
+    <p>Your trusted car rental platform across India.</p>
+  </div>
+</div>
+{% endblock body %}

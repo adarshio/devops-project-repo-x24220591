@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}RentMyRide — Premium Car Rentals{% endblock title %}
+
+{% block css %}
+<style>
+  body { background: #0d1b2a; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 70px);
+    background: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1800&q=85') center/cover no-repeat;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 0 6vw;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, rgba(158, 158, 158, 0.88) 40%, rgba(13,27,42,0.3) 100%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 640px; }
+  .hero-label {
+    display: inline-block;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #000000;
+    border: 1px solid rgba(200,169,110,0.5);
+    padding: 0.35rem 1rem; border-radius: 2px; margin-bottom: 1.8rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 700; color: #fff;
+    line-height: 1.12; margin-bottom: 1.4rem;
+  }
+  .hero h1 em { color: #000000; font-style: normal; }
+  .hero p {
+    font-size: 1.1rem; color: rgba(255,255,255,0.72);
+    line-height: 1.7; margin-bottom: 2.4rem; font-weight: 300;
+  }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-gold {
+    background: #000000; color: #fff;
+    border: none; padding: 0.9rem 2.2rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    font-weight: 600; letter-spacing: 0.04em;
+    border-radius: 4px; text-decoration: none;
+    transition: all 0.25s; display: inline-block;
+  }
+  .btn-gold:hover { background: #b8955a; color: #fff; transform: translateY(-1px); }
+  .btn-outline-w {
+    border: 1px solid rgba(255,255,255,0.5); color: #fff;
+    padding: 0.9rem 2.2rem; font-size: 0.95rem; font-weight: 500;
+    border-radius: 4px; text-decoration: none;
+    transition: all 0.25s; display: inline-block;
+    background: transparent;
+  }
+  .btn-outline-w:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+  .stat-item {
+    padding: 1.6rem 3.5rem; text-align: center;
+    border-right: 1px solid #f0ece6;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: #588157;
+  }
+  .stat-label { font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+  /* CARS SECTION */
+  .cars-section {
+    padding: 5rem 5vw;
+    background: #f1f4f8;
+  }
+  .section-header { margin-bottom: 2.5rem; }
+  .section-tag {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #000000; margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 700; color: #588157;
+  }
+
+  /* CARD */
+  .car-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  .car-card:hover {
+    box-shadow: 0 12px 40px rgba(26,60,94,0.14);
+    transform: translateY(-4px);
+  }
+  .car-card img {
+    width: 100%; height: 210px; object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .car-card:hover img { transform: scale(1.03); }
+  .car-card-body { padding: 1.4rem 1.5rem; }
+  .car-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.18rem; font-weight: 600; color: #588157;
+    margin-bottom: 0.3rem;
+  }
+  .car-meta { font-size: 0.84rem; color: #6b7280; margin-bottom: 0.25rem; }
+  .car-price {
+    font-size: 1rem; font-weight: 700; color: #000000;
+    margin: 0.6rem 0 1.1rem;
+  }
+  .btn-rent {
+    display: block; text-align: center;
+    background: #588157; color: #fff;
+    border: none; border-radius: 5px;
+    padding: 0.7rem; font-size: 0.88rem; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .btn-rent:hover { background: #000000; color: #fff; }
+
+  /* FEATURES */
+  .features-section { padding: 5rem 5vw; background: #fff; }
+  .feature-card {
+    padding: 2rem; border: 1px solid #f0ece6;
+    border-radius: 8px; text-align: center;
+    transition: box-shadow 0.2s;
+  }
+  .feature-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+  .feature-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(200,169,110,0.12);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem; font-size: 1.5rem;
+  }
+  .feature-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; color: #588157; margin-bottom: 0.5rem; }
+  .feature-desc { font-size: 0.88rem; color: #6b7280; line-height: 1.65; }
+
+  /* FOOTER */
+  footer {
+    background: #0d1b2a; color: rgba(255,255,255,0.55);
+    text-align: center; padding: 2rem;
+    font-size: 0.84rem;
+  }
+  footer span { color: #000000; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-label">Premium Car Rental Service</span>
+    <h1>Drive Your <em>Dream</em><br>Journey Begins Here</h1>
+    <p>Choose from a curated fleet of premium vehicles. Transparent pricing, flexible durations, and seamless booking — wherever you need to go.</p>
+    <div class="hero-cta">
+      <a href="/customer_login/" class="btn-gold">Browse Cars</a>
+      <a href="/car_dealer_login/" class="btn-outline-w">List Your Car</a>
+    </div>
+  </div>
+</section>
+
+<!-- CARS -->
+<section class="cars-section">
+  <div class="section-header">
+    <div class="section-tag">Available Fleet</div>
+    <h2 class="section-title">Explore Our Vehicles</h2>
+  </div>
+  <div class="row g-4">
+    {% for car in cars %}
+    <div class="col-lg-4 col-md-6">
+      <div class="car-card">
+        <img src="/media/{{car.image}}" alt="{{ car.name }}">
+        <div class="car-card-body">
+          <div class="car-name">{{ car.name }}</div>
+          <div class="car-meta">Dealer: {{ car.car_dealer }}</div>
+          <div class="car-meta">{{ car.location.city }}</div>
+          <div class="car-price">₹ {{ car.rent }} <span style="font-weight:400;font-size:0.82rem;color:#9ca3af;">/ day</span></div>
+          <a href="/customer_login/" class="btn-rent">Login to Rent</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock body %}

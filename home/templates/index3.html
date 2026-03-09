@@ -1,0 +1,42 @@
+{% extends "cardealerbase.html" %}
+{% block title %}Browse Fleet — RentMyRide{% endblock title %}
+
+{% block css %}
+<style>
+  .cars-section { padding: 1rem 0; }
+  .section-tag { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #000000; margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #588157; margin-bottom: 1.5rem; }
+  .car-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all 0.3s; height: 100%; }
+  .car-card:hover { box-shadow: 0 12px 40px rgba(26,60,94,0.14); transform: translateY(-4px); }
+  .car-card img { width: 100%; height: 210px; object-fit: cover; }
+  .car-card-body { padding: 1.4rem 1.5rem; }
+  .car-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #588157; margin-bottom: 0.3rem; }
+  .car-meta { font-size: 0.84rem; color: #6b7280; margin-bottom: 0.2rem; }
+  .car-price { font-size: 1rem; font-weight: 700; color: #000000; margin: 0.6rem 0 1.1rem; }
+  .btn-rent { display: block; text-align: center; background: #588157; color: #fff; border: none; border-radius: 5px; padding: 0.7rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+  .btn-rent:hover { background: #000000; color: #fff; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div style="padding: 1rem 0;">
+  <div class="section-tag">Full Listing</div>
+  <h2 class="section-title">All Vehicles on Platform</h2>
+  <div class="row g-4">
+    {% for car in cars %}
+    <div class="col-lg-4 col-md-6">
+      <div class="car-card">
+        <img src="/media/{{ car.image }}" alt="{{ car.name }}">
+        <div class="car-card-body">
+          <div class="car-name">{{ car.name }}</div>
+          <div class="car-meta">Dealer: {{ car.car_dealer }}</div>
+          <div class="car-meta">📍 {{ car.location.city }}</div>
+          <div class="car-price">₹ {{ car.rent }} <span style="font-weight:400;font-size:0.82rem;color:#9ca3af;">/ day</span></div>
+          <a href="/customer_login/" class="btn-rent">Login to Rent</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}
