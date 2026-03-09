@@ -7,14 +7,17 @@ on:
 
 jobs:
 
+# ---------------------------
+# 1️⃣ PRE-BUILD STAGE
+# ---------------------------
   prebuild_stage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -29,22 +32,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq unzip wget
 
-      - name: Install Java 17
+      - name: Install Java (required for Sonar)
         run: |
-          wget https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.deb
-          sudo dpkg -i amazon-corretto-17-x64-linux-jdk.deb
+          sudo apt-get install openjdk-17-jdk -y
           java -version
 
 
+# ---------------------------
+# 2️⃣ LINT + TEST STAGE
+# ---------------------------
   pylint_stage:
     runs-on: ubuntu-latest
     needs: prebuild_stage
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -63,24 +68,27 @@ jobs:
       - name: Run Django Tests
         run: |
           coverage run --source='.' manage.py test
-          coverage xml -i
+          coverage xml
 
-      - name: Upload Coverage Report
+      - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.xml
 
 
+# ---------------------------
+# 3️⃣ SONARCLOUD ANALYSIS
+# ---------------------------
   sonar_stage:
     runs-on: ubuntu-latest
     needs: pylint_stage
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Download Coverage Report
+      - name: Download Coverage Artifact
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
@@ -90,7 +98,7 @@ jobs:
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
           unzip sonar-scanner-cli-5.0.1.3006-linux.zip
           mv sonar-scanner-5.0.1.3006-linux sonar-scanner
-          echo "${{ github.workspace }}/sonar-scanner/bin" >> $GITHUB_PATH
+          echo "$GITHUB_WORKSPACE/sonar-scanner/bin" >> $GITHUB_PATH
 
       - name: Run SonarCloud Scan
         env:
@@ -105,8 +113,12 @@ jobs:
             -Dsonar.organization=$SONAR_ORG \
             -Dsonar.sources=. \
             -Dsonar.python.coverage.reportPaths=coverage.xml \
-            -Dsonar.exclusions=.c9/**,**/migrations/**,**/__pycache__/**,**/tests.py
+            -Dsonar.exclusions=.c9/**,**/migrations/**,**/__pycache__/**
 
+
+# ---------------------------
+# 4️⃣ PACKAGE ARTIFACT
+# ---------------------------
       - name: Create Deployment Package
         run: |
           zip -r deploy.zip . \
@@ -129,12 +141,15 @@ jobs:
           retention-days: 5
 
 
+# ---------------------------
+# 5️⃣ DEPLOYMENT STAGE
+# ---------------------------
   deploy_stage:
     runs-on: ubuntu-latest
     needs: sonar_stage
 
     steps:
-      - name: Download Deployment Package
+      - name: Download Deployment Artifact
         uses: actions/download-artifact@v4
         with:
           name: deploy-package
