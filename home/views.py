@@ -117,55 +117,79 @@ def customer_login(request):
 
     return render(request, "customer_login.html")
 
-
 def car_dealer_signup(request):
     if request.method == "POST":
+        # Debug: Print all POST data
+        print("POST data:", request.POST)
+        print("First name:", request.POST.get('first_name'))
+        print("First name (raw):", request.POST.get('first_name', '').strip())
+        
         username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name', '')
+        first_name = request.POST.get('first_name', '').strip()  # Add .strip()
+        last_name = request.POST.get('last_name', '').strip()
         email = request.POST.get('email')
         city = request.POST.get('city')
         phone = request.POST.get('phone')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        if password1 != password2:
-            return redirect('/car_dealer_signup')
+        # Check if first_name is empty
+        if not first_name:
+            print("ERROR: first_name is empty!")
+            return render(request, "car_dealer_signup.html", {
+                'error': 'First name is required'
+            })
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            first_name=first_name,
-            last_name=last_name,
-            password=password1
-        )
-        user.save()
+        if password1 != password2:
+            return render(request, "car_dealer_signup.html", {
+                'error': 'Passwords do not match'
+            })
+
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            return render(request, "car_dealer_signup.html", {
+                'error': 'Username already taken'
+            })
+
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            return render(request, "car_dealer_signup.html", {
+                'error': 'Email already registered'
+            })
 
         try:
-            location = Location.objects.get(city=city.lower())
-        except:
-            location = None
+            # Create user with all fields
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                password=password1
+            )
 
-        if location is not None:
+            # Handle location
+            location, created = Location.objects.get_or_create(city=city.lower())
+
             car_dealer = CarDealer(
                 car_dealer=user,
                 phone=phone,
                 location=location,
                 type="Car Dealer"
             )
-        else:
-            location = Location(city=city.lower())
-            location.save()
-            location = Location.objects.get(city=city.lower())
-            car_dealer = CarDealer(
-                car_dealer=user,
-                phone=phone,
-                location=location,
-                type="Car Dealer"
-            )
+            car_dealer.save()
 
-        car_dealer.save()
-        return render(request, "car_dealer_login.html")
+            return render(request, "car_dealer_login.html", {
+                'success': 'Account created successfully! Please login.'
+            })
+
+        except Exception as e:
+            print("Error creating user:", str(e))
+            # If user was created, delete it
+            if 'user' in locals():
+                user.delete()
+            return render(request, "car_dealer_signup.html", {
+                'error': f'Error creating account: {str(e)}'
+            })
 
     return render(request, "car_dealer_signup.html")
 
