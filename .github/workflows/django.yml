@@ -85,9 +85,6 @@ jobs:
         with:
           name: coverage-report
 
-      - name: Verify Coverage File
-        run: ls -l
-
       - name: Install Sonar Scanner
         run: |
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
@@ -101,16 +98,35 @@ jobs:
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
           SONAR_ORG: ${{ secrets.SONAR_ORG }}
         run: |
-          sonar-scanner -X \
+          sonar-scanner \
             -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.projectKey=$SONAR_PROJECT_KEY \
             -Dsonar.organization=$SONAR_ORG \
-            -Dsonar.projectBaseDir=. \
             -Dsonar.sources=. \
             -Dsonar.python.coverage.reportPaths=coverage.xml \
-            -Dsonar.exclusions=.c9/**,**/migrations/**,**/__pycache__/**,**/tests.py \
-            -Dsonar.qualitygate.wait=true
+            -Dsonar.exclusions=.c9/**,**/migrations/**,**/__pycache__/**,**/tests.py
+
+      - name: Create Deployment Package
+        run: |
+          zip -r deploy.zip . \
+            -x "*.git*" \
+            -x "*__pycache__*" \
+            -x "*.pyc" \
+            -x ".c9/*" \
+            -x "coverage.xml" \
+            -x ".coverage" \
+            -x "sonar-scanner*" \
+            -x "*.zip" \
+            -x ".pytest_cache/*" \
+            -x ".github/*"
+
+      - name: Upload Deployment Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-package
+          path: deploy.zip
+          retention-days: 5
 
 
   deploy_stage:
@@ -143,3 +159,5 @@ jobs:
           version_label: "build-${{ github.run_number }}"
           deployment_package: deploy.zip
           wait_for_deployment: false
+
+
